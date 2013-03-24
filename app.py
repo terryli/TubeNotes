@@ -1,15 +1,18 @@
 import os
 from flask import Flask, render_template, send_from_directory
+from flask.ext.sqlalchemy import SQLAlchemy
 
 #----------------------------------------
 # initialization
 #----------------------------------------
 
 app = Flask(__name__)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config.update(
     DEBUG = True,
 )
+
+db = SQLAlchemy(app)
 
 #----------------------------------------
 # controllers
