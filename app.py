@@ -1,18 +1,23 @@
 import os
-from flask import Flask, render_template, send_from_directory
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask import Flask
+from flask import render_template
+from flask import send_from_directory
+from models import db
+from models import Video
 
 #----------------------------------------
 # initialization
 #----------------------------------------
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://localhost/tubenotes')
 app.config.update(
     DEBUG = True,
 )
 
-db = SQLAlchemy(app)
+db.init_app(app)
+with app.test_request_context():
+    db.create_all()
 
 #----------------------------------------
 # controllers
