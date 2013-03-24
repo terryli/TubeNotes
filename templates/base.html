@@ -65,6 +65,9 @@
         {% block footer %}
         <footer class="footer">
             <p>&copy; MY_NEW_APP</p>
+	    {% for admin in admins %}
+	      <b>{{ admin.name }}<br/></b>
+	    {% endfor %}
         </footer>
         {% endblock %}
 

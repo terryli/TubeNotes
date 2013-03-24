@@ -1,8 +1,12 @@
 import os
+
 from flask import Flask
 from flask import render_template
 from flask import send_from_directory
+
 from models import db
+from models import Admin
+from models import Video
 
 #----------------------------------------
 # initialization
@@ -15,23 +19,18 @@ app.config.update(
 )
 
 db.init_app(app)
-with app.test_request_context():
-    from models import Admin
-    from models import Video
-    db.create_all()
+db.app = app
+db.create_all()
 
 #----------------------------------------
 # bootstrap
 #----------------------------------------
 
-admin_terry = Admin('Terry', 'tuber0')
-admin_dorko = Admin('Dorko', 'tuber1')
-with app.test_request_context():
-    if (Admin.query.filter_by(name='Terry').first() is None):
-        db.session.add(admin_terry)
-    if (Admin.query.filter_by(name='Dorko').first() is None):
-        db.session.add(admin_dorko)
-    db.session.commit()
+if (Admin.query.filter_by(name='Terry').first() is None):
+    db.session.add(Admin('Terry', 'tuber0'))
+if (Admin.query.filter_by(name='Dorko').first() is None):
+    db.session.add( Admin('Dorko', 'tuber1'))
+db.session.commit()
 
 #----------------------------------------
 # controllers
@@ -47,7 +46,8 @@ def page_not_found(e):
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    admins = Admin.query.all()
+    return render_template('index.html', admins=admins)
 
 #----------------------------------------
 # launch
