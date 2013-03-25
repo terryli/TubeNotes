@@ -49,6 +49,11 @@ def index():
     admins = Admin.query.all()
     return render_template('index.html', admins=admins)
 
+@app.route("/show")
+def show():
+    admins = Admin.query.all()
+    return render_template('show.html', admins=admins)
+
 #----------------------------------------
 # launch
 #----------------------------------------
