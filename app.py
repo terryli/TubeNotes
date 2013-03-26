@@ -4,9 +4,9 @@ from flask import Flask
 from flask import render_template
 from flask import send_from_directory
 
-from models import db
+from database import db
+from handler import Handler
 from models import Admin
-from models import Video
 
 #----------------------------------------
 # initialization
@@ -46,8 +46,9 @@ def page_not_found(e):
 
 @app.route("/")
 def index():
+    handler = Handler("asdfab")
     admins = Admin.query.all()
-    return render_template('index.html', admins=admins)
+    return render_template('index.html', admins=admins, info=handler.getVideoInfo())
 
 @app.route("/show")
 def show():

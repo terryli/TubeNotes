@@ -1,13 +1,15 @@
-from flask.ext.sqlalchemy import SQLAlchemy
+import datetime
 
-db = SQLAlchemy()
+from database import db
 
 class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(80))
+    date = db.Column(db.DateTime)
 
     def __init__(self, key):
         self.key = key
+        self.date = datetime.datetime.now()
 
     def __repr__(self):
         return '<Key %r>' % self.key
