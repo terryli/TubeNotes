@@ -60,6 +60,11 @@ def signup():
     #pw_hash = bcrypt.generate_password_hash('hunter2')
     return render_template('signup.html')
 
+@app.route("/show")
+def show():
+    admins = Admin.query.all()
+    return render_template('show.html', admins=admins)
+
 #----------------------------------------
 # launch
 #----------------------------------------
