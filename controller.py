@@ -16,10 +16,7 @@ class Controller():
         handler = Handler()
         if url:
             key = handler.getKey(url)
-            print "----"
-            print url
             print key
-            print "===="
 
     def signUp(self):
         pass

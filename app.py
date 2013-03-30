@@ -51,6 +51,10 @@ def page_not_found(e):
 @app.route("/")
 def index():
     url = request.args.get('url')
+    print url
+    print "-----"
+    # this should create or pull the right video id, then render
+    # show.html with the right video id
     controller = Controller()
     controller.testCalls(url)
     return controller.run()
@@ -60,8 +64,10 @@ def signup():
     #pw_hash = bcrypt.generate_password_hash('hunter2')
     return render_template('signup.html')
 
-@app.route("/show")
-def show():
+@app.route("/video/<int:param>")
+def show(param):
+    print param
+    print "===="
     admins = Admin.query.all()
     return render_template('show.html', admins=admins)
 
