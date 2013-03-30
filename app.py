@@ -1,11 +1,13 @@
 import os
 
 from flask import Flask
+from flask import request
 from flask import render_template
 from flask import send_from_directory
+from flask.ext.bcrypt import Bcrypt
 
+from controller import Controller
 from database import db
-from handler import Handler
 from models import Admin
 
 #----------------------------------------
@@ -22,21 +24,23 @@ db.init_app(app)
 db.app = app
 db.create_all()
 
+bcrypt = Bcrypt(app)
+
 #----------------------------------------
 # bootstrap
 #----------------------------------------
 
 if (Admin.query.filter_by(name='Terry').first() is None):
-    db.session.add(Admin('Terry', 'tuber0'))
+    db.session.add(Admin('Terry', 'tuber0', 'terry@tuber.com'))
 if (Admin.query.filter_by(name='Dorko').first() is None):
-    db.session.add( Admin('Dorko', 'tuber1'))
+    db.session.add( Admin('Dorko', 'tuber1', 'dorko@tuber.com'))
 db.session.commit()
 
 #----------------------------------------
 # controllers
 #----------------------------------------
 
-@app.route('/favicon.ico')
+@app.route("/favicon.ico")
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'ico/favicon.ico')
 
@@ -46,9 +50,15 @@ def page_not_found(e):
 
 @app.route("/")
 def index():
-    handler = Handler("asdfab")
-    admins = Admin.query.all()
-    return render_template('index.html', admins=admins, info=handler.getVideoInfo())
+    url = request.args.get('url')
+    controller = Controller()
+    controller.testCalls(url)
+    return controller.run()
+
+@app.route("/signup")
+def signup():
+    #pw_hash = bcrypt.generate_password_hash('hunter2')
+    return render_template('signup.html')
 
 #----------------------------------------
 # launch
