@@ -51,8 +51,6 @@ def page_not_found(e):
 @app.route("/")
 def index():
     url = request.args.get('url')
-    print url
-    print "-----"
     # this should create or pull the right video id, then render
     # show.html with the right video id
     controller = Controller()
@@ -69,6 +67,7 @@ def show(param):
     print param
     print "===="
     admins = Admin.query.all()
+    print admins
     return render_template('show.html', admins=admins)
 
 #----------------------------------------
