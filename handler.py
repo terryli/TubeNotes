@@ -23,37 +23,14 @@ class Handler():
         else:
             return url
 
-    def countCommentsByVideo(self, video):
-        return Comment.query.filter_by(video=video).count()
-
-    def countCommentsByUser(self, user):
-        return Comment.query.filter_by(user=user).count()
-
-    def getCommentsByVideo(self, video):
-        # add starting index and row count
-        return Comment.query.filter_by(video=video)
-
-    def getCommentsByUser(self, user):
-        # add starting index and row count
-        return Comment.query.filter_by(user=user)
-
-    def getVideoByKey(self, key):
-        return Video.query.filter_by(key=key).first()
-
-    def getVideoById(self, vid):
-        return Video.query.filter_by(id=vid).first()
-
-    def createVideo(self, key):
-        video = Video(key)
-        db.session.add(video)
-        db.session.commit()
-        return video.id
+    # ============================= #
+    # ======= Comment Calls ======= #
 
     def createComment(self, user, video, text):
         comment = Comment(user, video, text)
         db.session.add(comment)
         db.session.commit()
-        return comment.id
+        return comment
 
     def deleteComment(self, cid):
         comment = Comment.query.filter_by(id=cid).first()
@@ -67,14 +44,51 @@ class Handler():
         db.session.commit()
         return cid
 
+    def countCommentsByVideo(self, vid):
+        return Comment.query.filter_by(video=vid).count()
+
+    def countCommentsByUser(self, uid):
+        return Comment.query.filter_by(user=uid).count()
+
+    def getCommentsByVideo(self, vid, limit=100, offset=0):
+        return Comment.query.filter_by(video=vid).limit(limit).offset(offset).all()
+
+    def getCommentsByUser(self, uid, limit=100, offset=0):
+        return Comment.query.filter_by(user=uid).limit(limit).offset(offset).all()
+
+    def getCommentById(self, cid):
+        return Comment.query.filter_by(id=cid).first()
+
+    # =========================== #
+    # ======= Video Calls ======= #
+
+    def createVideo(self, key):
+        video = Video(key)
+        db.session.add(video)
+        db.session.commit()
+        return video
+
+    def getVideoByKey(self, key):
+        return Video.query.filter_by(key=key).first()
+
+    def getVideoById(self, vid):
+        return Video.query.filter_by(id=vid).first()
+
+    # ================== ======= #
+    # ======= User Calls ======= #
+
     def createUser(self, name, password, email):
         user = User(name, password, email)
         db.session.add(user)
         db.session.commit()
-        return user.id
+        return user
 
     def deleteUser(self, uid):
+        # delete comments
         user = User.query.filter_by(id=uid).first()
         db.session.delete(user)
         db.session.commit()
         return uid
+
+    def getUserById(self, uid):
+        return User.query.filter_by(id=uid).first()

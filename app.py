@@ -65,7 +65,8 @@ def signUp():
 
 @app.route("/video/<int:param>")
 def showVideo(param):
-    return controller.showVideo(param)
+    offset = request.args.get('offset')
+    return controller.showVideo(param, offset)
 
 @app.route("/comment/<int:param>")
 def showComment(param):
