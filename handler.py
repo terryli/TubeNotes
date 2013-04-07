@@ -3,6 +3,7 @@ from database import db
 import string
 import urlparse
 
+from models import Admin
 from models import Comment
 from models import User
 from models import Video
@@ -11,6 +12,9 @@ class Handler():
 
     def __init__(self):
         pass
+
+    def getAdmins(self):
+        return Admin.query.all()
 
     def getKey(self, url):
         if string.find(url, 'youtube.com') > 0:

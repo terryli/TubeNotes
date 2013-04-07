@@ -6,4 +6,10 @@
 {% else %}
      <p>You are logged in.</p>
 {% endif %}
+
+<p>Admins</p>
+{% for admin in admins %}
+    {{ admin.name }}
+{% endfor %}
+
 {% endblock %}

@@ -26,6 +26,8 @@ db.create_all()
 
 bcrypt = Bcrypt(app)
 
+controller = Controller()
+
 #----------------------------------------
 # bootstrap
 #----------------------------------------
@@ -45,30 +47,29 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'ico/favicon.ico')
 
 @app.errorhandler(404)
-def page_not_found(e):
+def pageNotFound(e):
     return render_template('404.html'), 404
 
 @app.route("/")
 def index():
     url = request.args.get('url')
-    # this should create or pull the right video id, then render
-    # show.html with the right video id
-    controller = Controller()
-    controller.testCalls(url)
-    return controller.run()
+    if (url):
+        return controller.findVideo(url)
+    else:
+        return controller.run()
 
 @app.route("/signup")
-def signup():
+def signUp():
     #pw_hash = bcrypt.generate_password_hash('hunter2')
     return render_template('signup.html')
 
 @app.route("/video/<int:param>")
-def show(param):
-    print param
-    print "===="
-    admins = Admin.query.all()
-    print admins
-    return render_template('show.html', admins=admins)
+def showVideo(param):
+    return controller.showVideo(param)
+
+@app.route("/comment/<int:param>")
+def showComment(param):
+    return controller.showComment(param)
 
 #----------------------------------------
 # launch
